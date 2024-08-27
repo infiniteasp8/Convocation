@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script src="https://cdn.jsdelivr.net/npm/jquery"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jquery.terminal/js/jquery.terminal.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/jquery.terminal/css/jquery.terminal.min.css"/>
+    <style>
+        .terminal-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            color: green;
+
+        }
+
+        #terminal {
+            width: 98%;
+            height: 80%;
+            background-color: #111111;
+            color: #006400; 
+            border-radius: 10px;
+            margin-top: -70px;
+            margin-bottom: 20px;
+        }
+
+
+        .cmd .prompt {
+            color: #c67519;
+        }
+
+        .counter {
+            margin-top: 10px;
+            font-size: 24px;
+            color: #c67519; 
+            text-align: center;
+            width: 100%;
+            margin-right: -150px;
+        }
+
+        .degree-text, .headi {
+            display: inline-block;
+            margin-top: 10px;
+            font-size: 24px;
+            color: #e27e20; 
+            text-align: center;
+            width: 500px;
+        }
+        .dgree{
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: auto;
+            font-weight: bolder;
+        }
+        .degree-text{
+            margin-left: 10px;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="terminal-container">
+        <div  id="terminal"></div>
+        <div class="dgree">
+            <span class="counter" style="color: rgb(14, 150, 14);" id="counter">0</span>
+            <span class="degree-text" id="degreeText">Degrees Uploaded</span>
+        </div>
+    </div>
+
+    <script>
+        // Array change, for values to present on terminal 
+        const names = ["John", "Alice", "Bob", "Emma", "Michael", "Sophia", "Liam", "Olivia"];
+        
+        // Function to print letter by letter with delay
+        function printName(term, name, callback) {
+            let index = 0;
+            const interval = setInterval(() => {
+                if (index < name.length) {
+                    term.echo(name[index], { newline: false });
+                    index++;
+                } else {
+                    term.echo('');
+                    clearInterval(interval);
+                    callback(); 
+                }
+            }, 50); //Manage the speed of the each letter 50 ms
+        }
+
+        // Total degree uploaded value
+        const targetValue = 54241;
+
+        $('#terminal').terminal({}, {
+            greetings: 'please wait, while we prepare the server to load the data...',
+            prompt: 'user> ',
+            onInit: function() {
+                const term = this;
+                let nameIndex = 0;
+
+                function printNamesRecursively() {
+                    if (nameIndex < 50) { // change this value to from 50 to more if want to keep terminal for more time
+                        const name = names[nameIndex % names.length]; 
+                        printName(term, name, printNamesRecursively); // Print each name letter by letter
+                        nameIndex++;
+                    }
+                }
+
+                printNamesRecursively(); 
+            }
+        }, {
+            width: '100%',
+            height: '100%',
+        });
+
+        let counterValue = 0;
+        const counterElement = document.getElementById('counter');
+        const degreeTextElement = document.getElementById('degreeText');
+        
+        const counterInterval = setInterval(function() {
+            counterValue += 547; //add the value by which, ap chahte h ki counter of degree change ho
+            counterElement.textContent = counterValue;
+
+        
+            if (counterValue >= targetValue) {
+                clearInterval(counterInterval);
+                degreeTextElement.style.display = 'in-line'; 
+                window.location.href = 'final.html'; 
+            }
+        }, 100); //  change to make the counter jyada or kam
+    </script>
+</body>
+</html>
